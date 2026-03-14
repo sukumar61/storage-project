@@ -45,3 +45,8 @@ export const login=async (req,res)=>{
         res.status(500).json({message:"something went wrong"})
     }
 }
+
+export const userprofile=(req,res)=>{
+    res.status(200).json({user:req.user})
+
+}
