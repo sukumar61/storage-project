@@ -1,10 +1,15 @@
-const db=require("../config/db")
+import pool from "../config/db.js"
 
-async function createuser(name,email,passwordhash) {
-    
-    const qury="insert into users (username,email,password) values(?,?,?)"
-    const [result]=db.execute(qury,[name,email,passwordhash])
+export const createUser=async(name,email,hashedpassword)=>{
+    const [result]=await pool.query(
+        `insert into users(username, email, password)
+        values(?,?,?)`,[name,email,hashedpassword]
+    )
     return result
-}
 
-module.exports={createuser}
+}
+export const findUserByEmail=async(email)=>{
+    const [user]=await pool.query(`select * from users where email=?`,[email])
+    return user[0]
+
+}
