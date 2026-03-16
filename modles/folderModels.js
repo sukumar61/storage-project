@@ -15,3 +15,8 @@ export const getFoldersByParentId=async(user_id,parent_folder_id)=>{
     const [result]=await pool.query(`select * from folders where user_id=? and parent_folder_id=?;`,[user_id,parent_folder_id])
     return result
 }
+
+export const deleteFolderFromDB=async(user_id,id)=>{
+    const [result]=await pool.query(`delete from folders where id=? and user_id=?`,[id,user_id])
+    return result
+}

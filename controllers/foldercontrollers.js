@@ -1,4 +1,4 @@
-import {createFolderqury,getAllFolders,getFoldersByParentId} from "../modles/folderModels.js"
+import {createFolderqury,getAllFolders,getFoldersByParentId,deleteFolderFromDB} from "../modles/folderModels.js"
 
 export const createFolder=async (req,res)=>{
     try{
@@ -31,7 +31,7 @@ export const getRootFolders=async(req,res)=>{ //gets the all roots folders accor
 export const getFolderById=async(req,res)=>{
     try{
         const {userid}=req.user
-        const{id}=req.params //gets the id from params
+        const{id}=req.params //gets the id from params from pathparameters
         const result=await getFoldersByParentId(userid,id)
         res.status(200).json({message:"got all folders from parent_folder",childFolders:result})
     }
@@ -39,4 +39,19 @@ export const getFolderById=async(req,res)=>{
         res.status(500).json({ error: err.message })
     }
     
+}
+
+export const deleteFolder=async(req,res)=>{
+    try{
+
+        const {userid}=req.user
+        const{id}=req.params //gets id from pathparameters
+        const result=await deleteFolderFromDB(userid,id) 
+        res.status(200).json({message:"Folder deleted",})
+
+    }
+    catch(err){
+        res.status(500).json({ error: err.message })
+
+    }
 }
