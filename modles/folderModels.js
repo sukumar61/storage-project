@@ -6,3 +6,7 @@ export const createFolderqury=async (user_id,folder_name,parent_folder_id)=>{
     return result
 
 }
+export const getAllFolders=async(user_id)=>{
+    const [result]=await pool.query(`select * from folders where user_id=? AND parent_folder_id IS NULL;`,[user_id]) 
+    return result
+}
