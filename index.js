@@ -3,6 +3,7 @@ import express from "express"
 import cors from 'cors'
 import router from "./routes/authRoutes.js"
 import folderRouter from "./routes/folder.js"
+import fileRouter from "./routes/files.js"
 
 
 
@@ -20,6 +21,7 @@ app.get("/", (req,res)=>{
 
 app.use("/api/auth",router)
 app.use("/folder",folderRouter)
+app.use("/files",fileRouter)
 
 app.listen(3000,()=>{
     console.log("server started")
