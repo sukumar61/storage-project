@@ -1,5 +1,7 @@
+import e from "express";
 import pool  from "../config/db.js";
 import fs from "fs"
+
 
 export const uploadFile=async (req,res)=>{
     try{
@@ -80,6 +82,29 @@ export const downloadFile=async (req,res)=>{
         const file=files[0]
         return res.download(file.filepath,file.filename)
 
+
+    }
+    catch(err){
+        console.log(err.message)
+        res.status(500).json({message:"Internal Server Error"})
+    }
+}
+
+export const deleteFile=async (req,res)=>{
+    try{
+        const {id}=req.params
+        const {userid}=req.user
+        console.log(userid)
+        const [files]=await pool.query(`select * from files where user_id=? and id=?`,[userid,id])
+        if(files.length===0){
+            return es.status(403).json({message:"File Not Found"})
+        }
+        const file=files[0]
+
+        fs.unlinkSync(file.filepath)
+        await pool.query(`delete from files where id =?`,[id])
+
+        res.status(200).json({message:"File deleted successfully"})
 
     }
     catch(err){
