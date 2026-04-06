@@ -49,3 +49,22 @@ export const getFiles=async(req,res)=>{
         res.status(500).json({message:"internal Server Error"})
     }
 }
+
+export const getStorageUsage=async (req,res)=>{
+    try{
+        const {userid}=req.user
+
+        const [usage]=await pool.query('select sum(filesize) as used from files where user_id=?',[userid])
+        const [plan]=await pool.query("select storage_limit from plans where id= (select plan_id from users where id=?)",[userid])
+        const usedBytes=usage[0].usage || 0
+        const storage_limit=plan[0].storage_limit 
+        const percentage=Math.round((usedBytes/storage_limit)*100)
+        res.status(200).json({usedBytes,storage_limit,percentage})
+        console.log(userid)
+
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({message:"Internal Server Error"})
+    }
+}
