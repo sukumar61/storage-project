@@ -2,7 +2,7 @@ import express from "express"
 import fs from "fs"
 import multer from "multer"
 import verifytoken from "../middleware/authMiddleware.js"
-import {uploadFile} from "../controllers/fileController.js"
+import {uploadFile,getFiles} from "../controllers/fileController.js"
 
 const storage=multer.diskStorage(
     {
@@ -21,5 +21,6 @@ const storage=multer.diskStorage(
 const upload=multer({storage}) //passing the storagedisk obj to the multer function
 const fileRouter=express.Router()
 fileRouter.post("/upload",verifytoken,upload.single("file"),uploadFile)
+fileRouter.get("/",verifytoken,getFiles)
 
 export default fileRouter

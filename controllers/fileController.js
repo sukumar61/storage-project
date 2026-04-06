@@ -33,3 +33,19 @@ export const uploadFile=async (req,res)=>{
         res.status(500).json({error:error.message})
     }
 }
+
+export const getFiles=async(req,res)=>{
+    try{
+        const {userid}=req.user
+        const folder_id=req.query.folder_id || null
+        const [files]=await pool.query(`
+            select * from files where user_id=? and folder_id <=>?`,[userid,folder_id])
+        console.log(files)
+        res.status(200).json({message:files})
+
+    }
+    catch(error){
+        console.log(error.message)
+        res.status(500).json({message:"internal Server Error"})
+    }
+}
