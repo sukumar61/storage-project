@@ -68,3 +68,22 @@ export const getStorageUsage=async (req,res)=>{
         res.status(500).json({message:"Internal Server Error"})
     }
 }
+
+export const downloadFile=async (req,res)=>{
+    try{
+        const {id}=req.params
+        const {userid}=req.user
+        const [files]=await pool.query(`select * from files where id=? and user_id=?`,[id,userid])
+        if (files.length===0){
+            return res.status(404).json({message:"File Not Found"})
+        }
+        const file=files[0]
+        return res.download(file.filepath,file.filename)
+
+
+    }
+    catch(err){
+        console.log(err.message)
+        res.status(500).json({message:"Internal Server Error"})
+    }
+}
